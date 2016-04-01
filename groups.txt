@@ -1,0 +1,8 @@
+darwin_projects -- sched_mit_darwin
+chill_projects -- sched_mit_hill
+crebbi_projects -- sched_bu_rebbi
+gcooperman_projects -- sched_neu_cooperman
+guest -- sched_engaging_default
+mit_general -- sched_mit_redwine
+pshenoy_projects -- sched_umass_shenoy
+mit_sloan_equinox -- sched_mit_sloan_equinox
