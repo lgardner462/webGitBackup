@@ -945,10 +945,13 @@ def ack_account():
 	chgroupList = {}
 	ackList = []
         nackList = []
-	counter = 0
+	listOfGroupLists = []
+
+	
 
 	#check all pending users for change in group
 	tempList = next(os.walk(usersDir))[1] 
+	counter = 0
 
 	for user in tempList:
 		counterString = str(counter)
@@ -957,7 +960,7 @@ def ack_account():
 		userSecondaryGroupFilePath = curUserDir + "/groups2.txt"
 		userAckFilePath = curUserDir + "/ACK_INFO.txt"	
 		userTestFilePath = curUserDir + "/TESTING123.txt"
-		
+		requestString = 'secondaryGroup' + counterString + '[]'
 
 		f = open(userGroupFilePath, 'r')
 		oldGroup = f.read().strip()
@@ -978,25 +981,13 @@ def ack_account():
 		newSecondaryGroupList = []
 		newGroupDisplayName = request.forms.get(user)
 		newGroup = groupsDict[newGroupDisplayName]
-		newSecondaryGroupList = request.query.getall('user[TestArray]')
-		requestString = 'secondaryGroup' + counterString + '[]'
-		testList = request.forms.getall(requestString)
-		#testDisplayList = newSecondaryGroupList[userCounter]
-		f = open(userTestFilePath, 'w+')
-		for i in testList:
-			f.write(i + "\n") 
-		#f.writelines(request.forms.getall('{{user[SECONDARYGROUPS]}}[]'))
-		#f.writelines(request.query.getall('user[SECONDARYGROUPS'))
-		#f.writelines(request.forms.getall('user[SECONDARYGROUPS][]'))
-		#f.writelines(request.forms.getall('user[SECONDARYGROUPS[]][]'))
-		#f.writelines(request.forms.getall('{{user[SECONDARYGROUPS][]'))
-		#f.writelines(request.forms.getall(user))
-		f.close()
-		
+
+		newSecondaryGroupList = request.forms.getall(requestString)
 		
 		#cmp resolves to 0 if both lists are equal			
 		if cmp(oldSecondaryGroupList,newSecondaryGroupList) != 0:			
 			chgroupList[user.strip()]=newSecondaryGroupList
+			listOfGroupLists.append(newSecondaryGroupList)
 			
 			#populate groups2.txt file with secondary groups
 			f = open(userSecondaryGroupFilePath, 'w')
@@ -1050,7 +1041,7 @@ def ack_account():
 	if not devMode: # toggle at the beginning of the file or in httpd.py
 		os.system("./pending-accounts -m rchelp-dev@mit.edu")
 
-	return template('ack_post_accountBeta', chgroupDict=chgroupDict, ackList=ackList, nackList=nackList,chgroupList=chgroupList,newSecondaryGroupList=newSecondaryGroupList)
+	return template('ack_post_accountBeta', chgroupDict=chgroupDict, ackList=ackList, nackList=nackList,chgroupList=chgroupList,listOfGroupLists=listOfGroupLists)
 
 
 

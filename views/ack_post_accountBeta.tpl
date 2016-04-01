@@ -12,10 +12,13 @@
       %if chgroupList:
       <h2>Secondary Groups Modified</h2>
       <ul>
+	% counter = 0
 	%for user in chgroupList:
-	%for secondaryGroup in newSecondaryGroupList:
-	<li>{{user}}   -->   {{secondaryGroup}}</li>
-	%end		     
+	%for group in listOfGroupLists[counter]:
+	<li>{{user}}   -->   {{group}}</li>
+	%end
+	%counter+=1		
+	%end     
       </ul>
       %end
 
